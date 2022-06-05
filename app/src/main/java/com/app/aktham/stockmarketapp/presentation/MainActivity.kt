@@ -1,9 +1,11 @@
-package com.app.aktham.stockmarketapp
+package com.app.aktham.stockmarketapp.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.app.aktham.stockmarketapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var _binding : ActivityMainBinding? = null
