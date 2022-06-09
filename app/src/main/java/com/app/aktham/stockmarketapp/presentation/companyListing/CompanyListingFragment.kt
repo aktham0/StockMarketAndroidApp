@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CompanyListingFragment : Fragment(R.layout.fragment_company_listing),
-    CompanyListingAdapter.CompanyListingOnItem{
+    CompanyListingAdapter.CompanyListingOnItem {
 
     private var _binding: FragmentCompanyListingBinding? = null
     private val binding get() = _binding!!
@@ -38,20 +38,15 @@ class CompanyListingFragment : Fragment(R.layout.fragment_company_listing),
         // setup company list recyclerView list
         initCompanyRecyclerList()
 
-        // get all company list data
-        companyListingViewModel.onEvent(
-            CompanyListingEvent.OnSearchQueryChange(query = "")
-        )
-
         // observe data from viewModel
         companyListingViewModel.state.observe(viewLifecycleOwner) { dataState ->
             dataState?.let {
                 binding.companyProgressBar.isVisible = it.isLoading
-                binding.stockSearchView.isVisible = !it.isLoading
                 binding.companyRecyclerView.isVisible = !it.isLoading
+                binding.swipeRefresh.isRefreshing = it.isRefreshing
+
                 it.errorMessage?.let { error ->
                     binding.errorMsgTv.text = error
-                    binding.stockSearchView.isVisible = false
                     binding.errorMsgTv.isVisible = true
                 }
 
@@ -60,15 +55,25 @@ class CompanyListingFragment : Fragment(R.layout.fragment_company_listing),
             }
         }
 
-        binding.stockSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.stockSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?) = false
             override fun onQueryTextChange(searchQuery: String?): Boolean {
-                companyListingViewModel.onEvent(
-                    CompanyListingEvent.OnSearchQueryChange(query = searchQuery?: "")
-                )
+                searchQuery?.let {
+                    companyListingViewModel.onEvent(
+                        CompanyListingEvent.OnSearchQueryChange(query = searchQuery ?: "")
+                    )
+                }
                 return true
             }
         })
+
+
+        // on Swipe
+        binding.swipeRefresh.setOnRefreshListener {
+            companyListingViewModel.onEvent(
+                CompanyListingEvent.Refresh
+            )
+        }
     }
 
 
@@ -82,12 +87,21 @@ class CompanyListingFragment : Fragment(R.layout.fragment_company_listing),
     // company list item onClick listener
     override fun onClick(position: Int, companyListing: CompanyListing) {
         // go to company details fragment
-        val action = CompanyListingFragmentDirections.actionCompanyListingFragmentToCompanyDetailsFragment(
-            symbol = companyListing.symbol
-        )
+        val action =
+            CompanyListingFragmentDirections.actionCompanyListingFragmentToCompanyDetailsFragment(
+                symbol = companyListing.symbol
+            )
         findNavController().navigate(
             action
         )
+        // clear search view
+        binding.stockSearchView.apply {
+            clearFocus()
+            setQuery("", false)
+            if (!isIconified)
+                isIconified = true
+        }
+
     }
 
     override fun onDestroyView() {

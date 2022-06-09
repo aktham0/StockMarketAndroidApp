@@ -11,8 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
-private const val TAG = "CompanyListingViewModel"
-
 @HiltViewModel
 class CompanyListingViewModel @Inject constructor(
     private val companyListingRepository: StockRepository
@@ -22,6 +20,10 @@ class CompanyListingViewModel @Inject constructor(
     val state :LiveData<CompanyListingState> get() = _state
 
     private var searchJob: Job? = null
+
+    init {
+        getCompanyListing()
+    }
 
     fun onEvent(event: CompanyListingEvent) {
         when (event) {
@@ -45,10 +47,14 @@ class CompanyListingViewModel @Inject constructor(
         searchQuery: String = _state.value?.searchQuery?.lowercase() ?: "",
         getFromRemote: Boolean = false
     ) {
+        if (getFromRemote){
+            _state.value = _state.value?.copy(
+                isRefreshing = true
+            )
+        }
         viewModelScope.launch {
             companyListingRepository.getCompanyListing(getFromRemote, searchQuery)
                 .collect { result ->
-                    Log.d(TAG, "Company Listing Result-> ${result.toString()}")
                     when (result) {
                         is Resource.Loading -> {
                             _state.value = _state.value?.copy(
@@ -56,16 +62,17 @@ class CompanyListingViewModel @Inject constructor(
                             )
                         }
                         is Resource.Error -> {
-                            Log.e(TAG, result.errorMessage.toString())
                             _state.value = _state.value?.copy(
                                 errorMessage = result.errorMessage ?: "",
-                                isLoading = false
+                                isLoading = false,
+                                isRefreshing = false
                             )
                         }
                         is Resource.Success -> {
                             result.data?.let { companyList ->
                                 _state.value = _state.value?.copy(
-                                    companies = companyList
+                                    companies = companyList,
+                                    isRefreshing = false
                                 )
                             }
                         }

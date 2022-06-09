@@ -4,36 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     tools:context=".presentation.companyListing.CompanyListingFragment">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/stockSearchView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_card"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="8dp"
-        android:elevation="10dp"
-        android:hint="@string/search_et_hint"
-        style="@style/Widget.AppCompat.Light.SearchView"
-        android:background="#DDD8D8"
-        android:lines="1"
-        android:maxLength="10"
-        android:maxLines="1"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@id/company_recycler_view"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp"
+        android:layout_margin="15dp"
+        app:layout_constraintBottom_toTopOf="@id/swipe_refresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/company_recycler_view"
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/stockSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:hint="@string/search_et_hint"
+            android:lines="1"
+            android:maxLength="10"
+            android:maxLines="1" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stockSearchView"
-        tools:listitem="@layout/company_list_item_view" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_card"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/company_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/stockSearchView"
+            tools:listitem="@layout/company_list_item_view" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/company_progress_bar"
@@ -51,7 +67,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
