@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/aktha/Documents/AndroidProjects/AndroidStudioProjects/StockMarketApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/aktha/Documents/AndroidProjects/AndroidStudioProjects/StockMarketApp/app/src/main/res/layout/company_list_item_view.xml" value="0.33" />
+        <entry key="..\:/Users/aktha/Documents/AndroidProjects/AndroidStudioProjects/StockMarketApp/app/src/main/res/layout/fragment_company_details.xml" value="0.25" />
+        <entry key="..\:/Users/aktha/Documents/AndroidProjects/AndroidStudioProjects/StockMarketApp/app/src/main/res/layout/fragment_company_listing.xml" value="0.2914529914529915" />
       </map>
     </option>
   </component>

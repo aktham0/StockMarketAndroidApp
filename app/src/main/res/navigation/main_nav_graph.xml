@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/companyListingFragment">
+
+    <fragment
+        android:id="@+id/companyListingFragment"
+        android:name="com.app.aktham.stockmarketapp.presentation.companyListing.CompanyListingFragment"
+        android:label="fragment_company_listing"
+        tools:layout="@layout/fragment_company_listing" >
+        <action
+            android:id="@+id/action_companyListingFragment_to_companyDetailsFragment"
+            app:destination="@id/companyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyDetailsFragment"
+        android:name="com.app.aktham.stockmarketapp.presentation.companyDetails.CompanyDetailsFragment"
+        android:label="fragment_company_details"
+        tools:layout="@layout/fragment_company_details" >
+        <argument
+            android:name="symbol"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>
